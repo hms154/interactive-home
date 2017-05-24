@@ -1,5 +1,6 @@
 import React from 'react';
 import Thing from './thing';
+import { Button, ButtonGroup, Row, Col, Container, Jumbotron } from 'reactstrap';
 
 class Scene extends React.Component {
   constructor() {
@@ -13,19 +14,37 @@ class Scene extends React.Component {
   }
 
   createThings() {
-      const lights = [1, 2, 3];
+      const lights = [0, 1, 2];
       return (
         <div>
-          {lights.map((light) => this.createThing(light))}        
+          <Jumbotron fluid>
+            <Container fluid>
+              <Row>
+                {lights.map((light) => this.createThing(light))}
+              </Row>
+            </Container>
+            <Container fluid>
+              <Row>
+                <ButtonGroup>
+                  <Button size='sm' color='link' onClick={() => this.doGroupAction(true)}>
+                    Turn Lights On
+                  </Button>
+                  <Button size='sm' color='link' onClick={() => this.doGroupAction(false)}>
+                    Turn Lights Off
+                  </Button>
+                </ButtonGroup>
+              </Row>
+            </Container>
+          </Jumbotron>        
         </div>
       )
   }
   createThing(light) {
     return (
-      <div key={light}>
+      <Col key={light}>
         <Thing name={light.toString()} value={this.state.things[light]} />
-        <button onClick={() => this.doAction(light)}>Turn on the light</button>
-      </div> 
+        <Button size='sm' outline color='primary' onClick={() => this.doAction(light)}>Turn on the light</Button>
+      </Col>
     )
   }
 
@@ -35,6 +54,15 @@ class Scene extends React.Component {
       this.setState({
           things: lights
       });
+  }
+
+  doGroupAction(targetstate) {
+    const lights = this.state.things.map((light) => {
+      return targetstate
+    })
+    this.setState({
+        things: lights
+    });
   }
 
   componentDidMount() {
