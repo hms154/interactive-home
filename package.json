@@ -9,6 +9,8 @@
   },
   "dependencies": {
     "bootstrap": "^4.0.0-alpha.6",
+    "canvas": "^1.6.5",
+    "jsdom": "^11.0.0",
     "konva": "^1.6.2",
     "prop-types": "^15.5.8",
     "react": "^15.5.4",

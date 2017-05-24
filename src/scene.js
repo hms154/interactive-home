@@ -1,13 +1,15 @@
 import React from 'react';
 import Thing from './thing';
 import { Button, ButtonGroup, Row, Col, Container, Jumbotron } from 'reactstrap';
+import {Layer, Stage} from 'react-konva';
+import Room from './room';
 
 class Scene extends React.Component {
   constructor() {
     super();
     this.state = { things: Array(3).fill(false) };
   }
-  
+
   render() {
     let things = this.createThings();
     return things;
@@ -34,8 +36,15 @@ class Scene extends React.Component {
                   </Button>
                 </ButtonGroup>
               </Row>
+              <Row>
+                <Stage width={700} height={700}>
+                  <Layer>
+                      <Room/>
+                  </Layer>
+                </Stage>
+              </Row>
             </Container>
-          </Jumbotron>        
+          </Jumbotron>
         </div>
       )
   }
