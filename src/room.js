@@ -15,12 +15,18 @@ class Room extends React.Component {
         color: Konva.Util.getRandomColor()
       });
     }
+    getColor() {
+      return this.props.value ? 'yellow' : 'gray'
+    }
     render() {
         return (
             <Rect
-                x={10} y={10} width={50} height={50}
-                fill={this.state.color}
-                shadowBlur={10}
+                x={200} y={0} width={50} height={50}
+                fill={this.getColor()}
+                //shadowBlur={10}
+                stroke={'black'}
+                strokeWidth={4}
+                opacity={0.2}
                 onClick={this.handleClick}
             />
         );

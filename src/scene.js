@@ -36,13 +36,6 @@ class Scene extends React.Component {
                   </Button>
                 </ButtonGroup>
               </Row>
-              <Row>
-                <Stage width={700} height={700}>
-                  <Layer>
-                      <Room/>
-                  </Layer>
-                </Stage>
-              </Row>
             </Container>
           </Jumbotron>
         </div>
@@ -51,6 +44,11 @@ class Scene extends React.Component {
   createThing(light) {
     return (
       <Col key={light}>
+        <Stage width={300} height={50}>
+          <Layer>
+              <Room value={this.state.things[light]}/>
+          </Layer>
+        </Stage>
         <Thing name={light.toString()} value={this.state.things[light]} />
         <Button size='sm' outline color='primary' onClick={() => this.doAction(light)}>Turn on the light</Button>
       </Col>
