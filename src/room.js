@@ -19,13 +19,14 @@ class Room extends React.Component {
       return this.props.value ? 'yellow' : 'gray'
     }
     render() {
+
         return (
             <Rect
-                x={200} y={0} width={50} height={50}
+                x={this.props.startX} y={this.props.startY} width={this.props.width} height={this.props.height}
                 fill={this.getColor()}
                 //shadowBlur={10}
                 stroke={'black'}
-                strokeWidth={4}
+                strokeWidth={this.props.strokeWidth}
                 opacity={0.2}
                 onClick={this.handleClick}
             />
