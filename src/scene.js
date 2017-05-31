@@ -1,7 +1,7 @@
 import React from 'react';
 import Thing from './thing';
 import { Button, ButtonGroup, Row, Col, Container, Jumbotron } from 'reactstrap';
-import {Layer, Stage, Text, Line, Rect} from 'react-konva';
+import {Layer, Stage, Text, Line, Rect, Group} from 'react-konva';
 import Room from './room';
 
 class Scene extends React.Component {
@@ -11,12 +11,11 @@ class Scene extends React.Component {
   }
 
   render() {
-    let things = this.createThings();
-    return things;
+    let home = this.createHome();
+    return home;
   }
 
-  createThings() {
-      const lights = [0, 1, 2];
+  createHome() {
       return (
         <div>
           <Jumbotron fluid>
@@ -32,13 +31,29 @@ class Scene extends React.Component {
   createThing(light) {
     var height = window.innerHeight > 400 ? 400 : window.innerHeight
     var width = window.innerWidth > 400 ? 400 : window.innerWidth
+    var startPosition = {x: 0, y: 0}
 
     var pad_style={
       padding: '20px'
     }
-    console.log("height: " + height + "Width: " + width)
     return (
       <Row>
+        {this.createActionButtons()}
+        <Col key={light}>
+          <Row>
+            <Stage width={width} height={height}>
+              {this.createBaseLayer(width, height, startPosition)}
+              {this.createRooms()}
+              {this.createRoomLabels()}
+            </Stage>
+          </Row>
+        </Col>
+      </Row>
+    )
+  }
+
+  createActionButtons() {
+    return (
        <Col>
           <Row>
             <Button size='sm' color='link' onClick={() => this.doAction(0)}>Bedroom lights</Button>
@@ -60,43 +75,68 @@ class Scene extends React.Component {
             </Button>
           </Row>
         </Col>
-        <Col key={light}>
-          <Row>
-            <Stage width={width} height={height}>
-              <Layer>
-                  <Room width={width} height={height} strokeWidth={0}/>
-                  <Rect x={0} y={0} width={width} height={height} stroke='black' strokeWidth={4} opacity={0.4}/>
-              </Layer>
-              <Layer>
-                  <Room startX={0} startY={0} width={200} height={140} value={this.state.things[0]}/>
-                  <Room startX={200} startY={0} width={200} height={140} value={this.state.things[1]}/>
-                  <Room startX={0} startY={140} width={400} height={400} value={this.state.things[2]}/>
-              </Layer>
-              <Layer>
-                <Line points={[0, 0, 200,0, 200, 140, 40, 140]} stroke='black' strokeWidth={2} opacity={0.4}/>
-                <Line points={[0, 140, 20,140]} stroke='black' strokeWidth={2} opacity={0.4}/>
-                <Line points={[20, 140, 40, 120]} stroke='black' strokeWidth={4} opacity={0.4}/>
+    )
+  }
 
-                <Line points={[200, 140, 360, 140]} stroke='black' strokeWidth={2} opacity={0.4}/>
-                <Line points={[380, 140, 400, 140]} stroke='black' strokeWidth={2} opacity={0.4}/>
-                <Line points={[380, 140, 360, 120]} stroke='black' strokeWidth={4} opacity={0.4}/>
+  createBaseLayer(width, height, startPosition) {
+    return (
+        <Layer>
+            <Room width={width} height={height} strokeWidth={0}/>
+            <Rect x={0} y={0} width={width} height={height} stroke='black' strokeWidth={4} opacity={0.4}/>
+        </Layer>
+    )
+  }
 
-                <Line points={[200, 140, 200, 400]} stroke='black' strokeWidth={1} opacity={0.4} dash={[10,5]}/>
-                <Line points={[40, 400, 60, 400]} stroke='black' strokeWidth={12} opacity={0.4}/>
-              </Layer>
-              <Layer>
-                  <Text x={80} y={20} text='Bedroom' opacity={0.4}/>
-                  <Text x={260} y={20} text='Master Bedroom' opacity={0.4}/>
-                  <Text x={80} y={160} text='Living Room' opacity={0.4}/>
-                  <Text x={260} y={160} text='Kitchen' opacity={0.4}/>
-              </Layer>
-            </Stage>
-          </Row>
-          <Row>
-            <div style={pad_style}></div>
-          </Row>
-        </Col>
-      </Row>
+  createRooms() {
+    return (
+        <Layer>
+            {this.createBedroom()}
+            {this.createMasterBedroom()}
+            {this.createLivingRoom()}
+        </Layer>
+    )
+  }
+
+  createBedroom() {
+    return (
+      <Group>
+          <Room startX={0} startY={0} width={200} height={140} value={this.state.things[0]}/>
+          <Line points={[0, 0, 200,0, 200, 140, 40, 140]} stroke='black' strokeWidth={2} opacity={0.4}/>
+          <Line points={[0, 140, 20,140]} stroke='black' strokeWidth={2} opacity={0.4}/>
+          <Line points={[20, 140, 40, 120]} stroke='black' strokeWidth={4} opacity={0.4}/>
+      </Group>
+    )
+  }
+
+  createMasterBedroom() {
+    return (
+      <Group>
+          <Room startX={200} startY={0} width={200} height={140} value={this.state.things[1]}/>
+          <Line points={[200, 140, 360, 140]} stroke='black' strokeWidth={2} opacity={0.4}/>
+          <Line points={[380, 140, 400, 140]} stroke='black' strokeWidth={2} opacity={0.4}/>
+          <Line points={[380, 140, 360, 120]} stroke='black' strokeWidth={4} opacity={0.4}/>
+      </Group>
+    )
+  }
+
+  createLivingRoom() {
+    return (
+        <Group>
+          <Room startX={0} startY={140} width={400} height={400} value={this.state.things[2]}/>
+          <Line points={[200, 140, 200, 400]} stroke='black' strokeWidth={1} opacity={0.4} dash={[10,5]}/>
+          <Line points={[40, 400, 60, 400]} stroke='black' strokeWidth={12} opacity={0.4}/>
+        </Group>
+    )
+  }
+
+  createRoomLabels() {
+    return (
+        <Layer>
+            <Text x={80} y={20} text='Bedroom' opacity={0.4}/>
+            <Text x={260} y={20} text='Master Bedroom' opacity={0.4}/>
+            <Text x={80} y={160} text='Living Room' opacity={0.4}/>
+            <Text x={260} y={160} text='Kitchen' opacity={0.4}/>
+        </Layer>
     )
   }
 
